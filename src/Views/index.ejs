@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send OTP</title>
+</head>
+<body>
+    <form action="/send_msg" method='post'>
+        <div class="form-grp">
+            <label for="number">Enter the Number: </label>
+            <input type="text" name="number" id="number" placeholder="Enter your number">
+        </div>
+        <div class="form-grp">
+            <label for="msg">Enter the Message: </label>
+            <input type="text" name="msg" id="msg" placeholder="Enter the Message">
+        </div>
+        <input type="submit" value='Send Message'>
+    </form>
+</body>
+</html>
