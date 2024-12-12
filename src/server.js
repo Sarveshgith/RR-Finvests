@@ -4,6 +4,7 @@ const errorHandler = require('./Middleware/ErrorHandler');
 const dotenv = require('dotenv').config();
 const fast2sms = require('fast-two-sms');
 const DefinedError = require('./Middleware/DefinedError');
+const path = require('path');
 
 const port = 5000;
 dbConnect();
@@ -15,7 +16,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/users', require('./Routes/UserRoute'));
 app.use(errorHandler);
 
+app.set('views', path.join(__dirname, 'Views'));
 app.set('view engine', 'ejs');
+
+app.get('/skibidi', (req, res) => {
+	res.send('Hello World');
+});
+
 app.get('/', (req, res) => {
 	res.render('index.ejs');
 });
