@@ -1,6 +1,6 @@
 const express = require('express');
 const dbConnect = require('./Config/dbConnect');
-const errorHandler = require('./Middleware/ErrorHandler');
+const errorHandler = require('./Middleware/errorHandler');
 const dotenv = require('dotenv').config();
 const fast2sms = require('fast-two-sms');
 const DefinedError = require('./Middleware/DefinedError');
