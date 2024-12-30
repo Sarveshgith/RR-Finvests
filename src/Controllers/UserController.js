@@ -142,7 +142,7 @@ const UploadUsers = async (req, res) => {
     const sheetName = workbook.SheetNames[0];
     const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-    const usersToCreate = sheetData.map((row) => {
+    const bulkOperations = sheetData.map((row) => {
       const trimmedMobileNo = row.mobile_no ? String(row.mobile_no).trim() : '';
       const trimmedPanNo = row.pan_no ? String(row.pan_no).trim() : '';
       const trimmedInitVal = row.init_val ? String(row.init_val).trim() : '';
@@ -164,20 +164,32 @@ const UploadUsers = async (req, res) => {
       const currValAsNumber = Number(trimmedCurrVal);
 
       return {
-        pan_no: trimmedPanNo,
-        mobile_no: mobileNumberAsNumber,
-        name: row.name ? String(row.name).trim() : '',
-        role: row.role ? String(row.role).trim() : 'USER',
-        initial_deposit: initValAsNumber,
-        current_value: currValAsNumber,
+        updateOne: {
+          filter: { pan_no: trimmedPanNo },
+          update: {
+            $set: {
+              mobile_no: mobileNumberAsNumber,
+              name: row.name ? String(row.name).trim() : '',
+              role: row.role ? String(row.role).trim() : 'USER',
+              initial_deposit: initValAsNumber,
+              current_value: currValAsNumber,
+            },
+          },
+          upsert: true,
+        },
       };
     });
 
-    const result = await User.insertMany(usersToCreate);
-    return res.status(200).json({ message: `Inserted ${result.length} users successfully!` });
+    const result = await User.bulkWrite(bulkOperations);
+
+    return res.status(200).json({
+      message: `Processed ${bulkOperations.length} records successfully!`,
+      insertedCount: result.upsertedCount,
+      modifiedCount: result.modifiedCount,
+    });
   } catch (err) {
-    errHandle(err, err instanceof DefinedError, 'Bulk Save Failed', res);
     console.log(err);
+    errHandle(err, err instanceof DefinedError, 'Bulk Save Failed', res);
   }
 };
 
