@@ -145,6 +145,8 @@ const UploadUsers = async (req, res) => {
     const usersToCreate = sheetData.map((row) => {
       const trimmedMobileNo = row.mobile_no ? String(row.mobile_no).trim() : '';
       const trimmedPanNo = row.pan_no ? String(row.pan_no).trim() : '';
+      const trimmedInitVal = row.init_val ? String(row.init_val).trim() : '';
+      const trimmedCurrVal = row.curr_val ? String(row.curr_val).trim() : '';
 
       const isValidMobile = /^\d{10}$/.test(trimmedMobileNo);
       const isValidPan = /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(trimmedPanNo);
@@ -158,12 +160,16 @@ const UploadUsers = async (req, res) => {
       }
 
       const mobileNumberAsNumber = Number(trimmedMobileNo);
+      const initValAsNumber = Number(trimmedInitVal);
+      const currValAsNumber = Number(trimmedCurrVal);
 
       return {
         pan_no: trimmedPanNo,
         mobile_no: mobileNumberAsNumber,
         name: row.name ? String(row.name).trim() : '',
         role: row.role ? String(row.role).trim() : 'USER',
+        initial_deposit: initValAsNumber,
+        current_value: currValAsNumber,
       };
     });
 
