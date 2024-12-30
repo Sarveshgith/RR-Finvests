@@ -24,6 +24,16 @@ const UserSchema = new mongoose.Schema(
 			default: 'USER',
 			/*USER, ADMIN */
 		},
+
+		initial_deposit: {
+			type: Number,
+			default: 0,
+		},
+
+		current_value: {
+			type: Number,
+			default: 0,
+		},
 	},
 	{
 		timestamps: true,
